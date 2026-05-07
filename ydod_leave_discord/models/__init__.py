@@ -1,2 +1,2 @@
-from . import discord_config
+from . import res_users
 from . import hr_leave

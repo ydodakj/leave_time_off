@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Isi value di Settings > Technical > System Parameters > discord.leave.webhook.url -->
+    <record id="discord_leave_webhook_url_param" model="ir.config_parameter">
+        <field name="key">discord.leave.webhook.url</field>
+        <field name="value"></field>
+    </record>
+</odoo>

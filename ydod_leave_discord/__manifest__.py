@@ -8,19 +8,17 @@
         - Notify Discord channel when leave is submitted
         - Notify when leave is approved or refused
         - Notify when leave is reset to draft
-        - Configurable webhook URL per leave type or global
-        - Customizable message templates with dynamic fields
-        - Support for multiple Discord channels
+        - Webhook URL configured via System Parameters
+        - Employee mention via Discord User ID on res.users
     """,
     'author': 'Dody Ahmad Kusuma Jaya',
     'website': 'https://github.com/dodyakj',
     'license': 'LGPL-3',
-    'depends': ['hr_holidays','hr'],
+    'depends': ['hr_holidays', 'hr'],
     'data': [
         'security/ir.model.access.csv',
-        'data/discord_config_data.xml',
-        'views/discord_config_views.xml',
-        'views/hr_leave_views.xml',
+        'data/ir_config_parameter.xml',
+        'views/res_users_views.xml',
         'views/menu_views.xml',
     ],
     'images': ['static/description/banner.png'],

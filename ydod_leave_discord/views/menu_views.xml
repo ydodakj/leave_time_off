@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-    <menuitem id="menu_ydod_discord_root"
-              name="Discord Integration"
-              parent="hr_holidays.menu_hr_holidays_configuration"
-              sequence="90"/>
-
-    <menuitem id="menu_ydod_discord_webhooks"
-              name="Webhook Configurations"
-              parent="menu_ydod_discord_root"
-              action="action_ydod_discord_webhook_config"
-              sequence="10"/>
-
+    <!--
+        Webhook URL dikonfigurasi di:
+        Settings > Technical > System Parameters > discord.leave.webhook.url
+        Discord User ID dikonfigurasi di profil User (Settings > Users).
+        Tidak ada menu tambahan yang diperlukan.
+    -->
 </odoo>
