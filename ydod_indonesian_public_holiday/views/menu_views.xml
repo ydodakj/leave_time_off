@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_ydod_indonesian_holiday_root"
+              name="Indonesian Public Holidays"
+              parent="hr_holidays.menu_hr_holidays_configuration"
+              sequence="91"/>
+
+    <menuitem id="menu_ydod_indonesian_holiday_import"
+              name="Import Holidays"
+              parent="menu_ydod_indonesian_holiday_root"
+              action="action_ydod_import_indonesian_holiday_wizard"
+              sequence="10"/>
+
+</odoo>

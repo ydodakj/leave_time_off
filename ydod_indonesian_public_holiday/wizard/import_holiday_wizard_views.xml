@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_ydod_import_indonesian_holiday_wizard_form" model="ir.ui.view">
+        <field name="name">ydod.import.indonesian.holiday.wizard.form</field>
+        <field name="model">ydod.import.indonesian.holiday.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import Hari Libur Nasional Indonesia">
+                <group string="Pengaturan Import">
+                    <group>
+                        <field name="year"/>
+                        <field name="import_mode" widget="radio"/>
+                        <field name="skip_existing"/>
+                        <field name="dry_run"/>
+                    </group>
+                    <group>
+                        <field name="calendar_ids" widget="many2many_tags"
+                               invisible="import_mode == 'global'"
+                               placeholder="Kosongkan untuk semua jadwal aktif"/>
+                    </group>
+                </group>
+                <div class="alert alert-info" invisible="import_mode != 'global'">
+                    Mode <b>Global</b>: hari libur akan muncul di
+                    <b>Time Off &gt; Configuration &gt; Public Holidays</b>
+                    dan berlaku untuk semua karyawan.
+                </div>
+                <div class="alert alert-warning" invisible="import_mode != 'calendar'">
+                    Mode <b>Per Work Schedule</b>: hari libur diterapkan ke jadwal kerja
+                    yang dipilih dan tidak muncul di menu Public Holidays global.
+                </div>
+                <group string="Preview" invisible="not preview_html">
+                    <field name="preview_html" nolabel="1"/>
+                </group>
+                <footer>
+                    <button name="action_preview" string="Preview"
+                            type="object" class="btn-secondary"/>
+                    <button name="action_import" string="Import Sekarang"
+                            type="object" class="btn-primary"/>
+                    <button string="Batal" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_ydod_import_indonesian_holiday_wizard" model="ir.actions.act_window">
+        <field name="name">Import Hari Libur Indonesia</field>
+        <field name="res_model">ydod.import.indonesian.holiday.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_ydod_discord_webhook_config_form" model="ir.ui.view">
+        <field name="name">ydod.discord.webhook.config.form</field>
+        <field name="model">ydod.discord.webhook.config</field>
+        <field name="arch" type="xml">
+            <form string="Discord Webhook Config">
+                <header>
+                    <button name="action_test_webhook" string="Test Webhook"
+                            type="object" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                            invisible="active"/>
+                    <group>
+                        <group string="General">
+                            <field name="name"/>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="sequence"/>
+                            <field name="webhook_url" password="True"/>
+                            <field name="username"/>
+                            <field name="avatar_url" placeholder="https://..."/>
+                        </group>
+                        <group string="Trigger Events">
+                            <field name="notify_submit"/>
+                            <field name="notify_approve"/>
+                            <field name="notify_refuse"/>
+                            <field name="notify_reset"/>
+                            <field name="mention_employee"/>
+                        </group>
+                    </group>
+                    <group string="Scope">
+                        <field name="is_global"/>
+                        <field name="leave_type_ids" widget="many2many_tags"
+                               invisible="is_global"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ydod_discord_webhook_config_list" model="ir.ui.view">
+        <field name="name">ydod.discord.webhook.config.list</field>
+        <field name="model">ydod.discord.webhook.config</field>
+        <field name="arch" type="xml">
+            <list string="Discord Webhook Configs" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="webhook_url" password="True"/>
+                <field name="is_global"/>
+                <field name="notify_submit"/>
+                <field name="notify_approve"/>
+                <field name="notify_refuse"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_ydod_discord_webhook_config" model="ir.actions.act_window">
+        <field name="name">Discord Webhooks</field>
+        <field name="res_model">ydod.discord.webhook.config</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+</odoo>
