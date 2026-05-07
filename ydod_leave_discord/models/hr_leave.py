@@ -1,7 +1,7 @@
 import logging
 import requests
 from datetime import datetime, timezone, timedelta
-from odoo import models
+from odoo import api, models
 
 _logger = logging.getLogger(__name__)
 
@@ -77,6 +77,16 @@ class HrLeave(models.Model):
                 _logger.info('Discord leave notification sent: leave=%s state=%s', leave.id, state)
             except Exception as exc:
                 _logger.error('Gagal kirim Discord leave notification: %s', exc)
+
+    # ── create override — tangkap saat leave pertama dibuat ──────────────────
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        leaves = super().create(vals_list)
+        for leave in leaves:
+            if leave.state in STATE_EVENT:
+                leave._send_discord(leave.state)
+        return leaves
 
     # ── write override — tangkap semua perubahan state ────────────────────────
 
