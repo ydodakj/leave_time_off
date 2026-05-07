@@ -117,9 +117,3 @@ class HrLeave(models.Model):
         result = super().action_draft()
         self._send_discord('reset')
         return result
-
-
-    def action_validate(self):
-        result = super().action_validate()
-        self._send_discord('validate')
-        return result
