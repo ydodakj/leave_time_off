@@ -74,6 +74,30 @@ class HrLeave(models.Model):
             except Exception as exc:
                 _logger.error('Gagal kirim Discord leave notification: %s', exc)
 
+    def _state_to_event(self):
+        return {
+            'confirm': 'confirm',
+            'validate1': 'validate',
+            'validate': 'validate',
+            'refuse': 'refuse',
+            'draft': 'reset',
+        }.get(self.state, 'confirm')
+
+    def action_send_discord_manual(self):
+        """Manual trigger — kirim notifikasi sesuai state saat ini."""
+        for leave in self:
+            event = leave._state_to_event()
+            leave._send_discord(event)
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Discord',
+                'message': 'Notifikasi berhasil dikirim ke Discord.',
+                'type': 'success',
+            },
+        }
+
     def action_confirm(self):
         result = super().action_confirm()
         self._send_discord('confirm')

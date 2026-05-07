@@ -19,6 +19,7 @@
         'security/ir.model.access.csv',
         'data/ir_config_parameter.xml',
         'views/res_users_views.xml',
+        'views/hr_leave_views.xml',
         'views/menu_views.xml',
     ],
     'images': ['static/description/banner.png'],
