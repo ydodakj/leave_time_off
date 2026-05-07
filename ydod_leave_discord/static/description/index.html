@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leave Discord Integration — Odoo 19</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary:      #714B67;
+      --primary-dark: #5a3a52;
+      --accent:       #5865F2;
+      --accent-dark:  #4752c4;
+      --bg-light:     #F8F9FA;
+      --text-main:    #212529;
+      --text-light:   #6C757D;
+      --white:        #FFFFFF;
+      --radius:       12px;
+      --shadow:       0 4px 12px rgba(0,0,0,0.08);
+      --transition:   all 0.3s ease;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; color: var(--text-main); background: var(--bg-light); line-height: 1.6; }
+    a { text-decoration: none; color: inherit; transition: var(--transition); }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #3b2d47 60%, var(--accent) 100%);
+      color: var(--white); padding: 3rem 2rem 2.5rem; text-align: center;
+    }
+    .hero-icon {
+      width: 72px; height: 72px; background: rgba(255,255,255,0.15);
+      border-radius: 18px; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin-bottom: 1.2rem; backdrop-filter: blur(6px);
+    }
+    .hero h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 0.4rem; line-height: 1.25; }
+    .hero .subtitle { font-size: 1rem; opacity: 0.88; margin-bottom: 1.4rem; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.4rem; }
+    .badge {
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 50px; font-size: 0.82rem; padding: 0.28rem 0.85rem; backdrop-filter: blur(4px);
+    }
+    .badge i { margin-right: 0.3rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.65rem 1.4rem; border-radius: var(--radius);
+      font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition); border: none;
+    }
+    .btn-accent { background: var(--accent); color: var(--white); }
+    .btn-accent:hover { background: var(--accent-dark); transform: translateY(-2px); }
+    .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.7); color: var(--white); }
+    .btn-outline:hover { background: var(--white); color: var(--primary); }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .section-title { margin-bottom: 1.5rem; }
+    .section-title h2 {
+      font-size: 1.35rem; color: var(--primary);
+      display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;
+    }
+    .section-title p { color: var(--text-light); font-size: 0.92rem; }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+      gap: 1.1rem; margin-bottom: 2.5rem;
+    }
+    .feature-card {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.3rem 1.2rem; border: 1px solid #eee; transition: var(--transition);
+    }
+    .feature-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    .feature-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-size: 1.1rem; margin-bottom: 0.9rem;
+    }
+    .feature-card h4 { font-size: 0.97rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .feature-card p { font-size: 0.87rem; color: var(--text-light); line-height: 1.55; }
+
+    .steps { margin-bottom: 2.5rem; }
+    .step {
+      display: flex; gap: 1rem; align-items: flex-start;
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.1rem 1.2rem; margin-bottom: 0.85rem; border: 1px solid #eee; transition: var(--transition);
+    }
+    .step:hover { box-shadow: 0 8px 18px rgba(0,0,0,0.1); }
+    .step-num {
+      min-width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-weight: 700; font-size: 0.9rem;
+    }
+    .step-body h4 { font-size: 0.97rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .step-body p  { font-size: 0.87rem; color: var(--text-light); }
+
+    .preview-box {
+      background: #36393f; border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.4rem 1.5rem; margin-bottom: 2.5rem; border-left: 4px solid #5865F2;
+    }
+    .preview-header { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.9rem; }
+    .discord-avatar {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), #5865F2);
+      display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1rem;
+    }
+    .preview-header .bot-name { color: #fff; font-weight: 600; font-size: 0.92rem; }
+    .preview-header .bot-tag {
+      background: #5865F2; color: #fff; font-size: 0.7rem;
+      padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 600; margin-left: 0.3rem;
+    }
+    .preview-msg { color: #dcddde; font-size: 0.9rem; line-height: 1.8; }
+    .preview-msg strong { color: #fff; }
+    .discord-mention {
+      background: rgba(88,101,242,0.3); color: #7c94ff;
+      padding: 0 3px; border-radius: 3px; font-weight: 600;
+    }
+
+    .config-section { margin-bottom: 2.5rem; }
+    .config-table {
+      width: 100%; border-collapse: collapse; background: var(--white);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+    }
+    .config-table thead tr { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+    .config-table thead th { color: var(--white); padding: 0.8rem 1rem; font-size: 0.88rem; text-align: left; font-weight: 600; }
+    .config-table tbody tr { border-bottom: 1px solid #f0f0f0; }
+    .config-table tbody tr:last-child { border-bottom: none; }
+    .config-table tbody tr:hover { background: var(--bg-light); }
+    .config-table td { padding: 0.75rem 1rem; font-size: 0.875rem; vertical-align: top; }
+    .config-table td:first-child { color: var(--accent); font-weight: 600; font-family: monospace; font-size: 0.85rem; }
+
+    .demo-box {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      overflow: hidden; border: 1px solid #eee; margin-bottom: 2.5rem;
+    }
+    .demo-box img { width: 100%; display: block; }
+    .demo-box .demo-caption {
+      padding: 0.75rem 1rem; font-size: 0.87rem; color: var(--text-light);
+      border-top: 1px solid #eee; display: flex; align-items: center; gap: 0.4rem;
+    }
+    .demo-box .demo-caption i { color: var(--accent); }
+
+    .code-block {
+      background: #1e1e2e; border-radius: 8px; padding: 0.85rem 1.1rem; margin: 0.55rem 0 0.6rem;
+      font-family: 'Courier New', monospace; font-size: 0.82rem; color: #cdd6f4;
+      overflow-x: auto; border: 1px solid #313244; line-height: 1.7;
+    }
+    .alert-box {
+      border-radius: 8px; padding: 0.75rem 1rem; margin: 0.55rem 0 0.3rem;
+      display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.85rem; line-height: 1.55;
+    }
+    .alert-info    { background: #e8f4f8; border-left: 4px solid #017E84; color: #1a5c61; }
+    .alert-warning { background: #fff8e1; border-left: 4px solid #f59e0b; color: #92400e; }
+    .alert-box > i { margin-top: 0.15rem; flex-shrink: 0; }
+
+    .trouble-table {
+      width: 100%; border-collapse: collapse; background: var(--white);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 2.5rem;
+    }
+    .trouble-table thead tr { background: linear-gradient(135deg, #2d3748, #1a202c); }
+    .trouble-table thead th { color: var(--white); padding: 0.75rem 1rem; font-size: 0.88rem; text-align: left; font-weight: 600; }
+    .trouble-table tbody tr { border-bottom: 1px solid #f0f0f0; }
+    .trouble-table tbody tr:last-child { border-bottom: none; }
+    .trouble-table tbody tr:hover { background: var(--bg-light); }
+    .trouble-table td { padding: 0.75rem 1rem; font-size: 0.875rem; vertical-align: top; }
+    .trouble-table td:first-child { color: #dc2626; font-weight: 500; }
+
+    .security-list {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.2rem 1.4rem; margin-bottom: 2.5rem; border: 1px solid #eee;
+    }
+    .security-item {
+      display: flex; gap: 0.75rem; align-items: flex-start;
+      padding: 0.65rem 0; border-bottom: 1px solid #f5f5f5; font-size: 0.875rem; line-height: 1.55;
+    }
+    .security-item:last-child { border-bottom: none; }
+    .security-item .sec-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .security-item strong { color: var(--primary); }
+
+    .tech-card {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.3rem 1.5rem; margin-bottom: 2.5rem; border: 1px solid #eee;
+    }
+    .tech-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0; border-bottom: 1px solid #f5f5f5; }
+    .tech-row:last-child { border-bottom: none; }
+    .tech-label { color: var(--text-light); font-size: 0.85rem; min-width: 100px; }
+    .tech-value { font-size: 0.9rem; font-weight: 500; }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 2.5rem; }
+    .tag {
+      background: var(--bg-light); border: 1px solid #ddd; border-radius: 50px;
+      font-size: 0.82rem; color: var(--text-main); padding: 0.28rem 0.75rem;
+    }
+    .tag i { color: var(--accent); margin-right: 0.25rem; }
+
+    .author-card {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: var(--radius); padding: 1.5rem 1.8rem; color: var(--white);
+      display: flex; align-items: center; gap: 1.2rem; margin-bottom: 2.5rem; flex-wrap: wrap;
+    }
+    .author-avatar {
+      width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0;
+      border: 3px solid rgba(255,255,255,0.5);
+    }
+    .author-info h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .author-info p  { font-size: 0.87rem; opacity: 0.88; margin-bottom: 0.5rem; }
+    .author-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .author-link {
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 50px; font-size: 0.8rem; padding: 0.25rem 0.75rem; color: var(--white);
+      display: flex; align-items: center; gap: 0.3rem; transition: var(--transition);
+    }
+    .author-link:hover { background: rgba(255,255,255,0.35); }
+
+    .support-banner {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.3rem 1.5rem; text-align: center; border: 1px solid #eee; margin-bottom: 1rem;
+    }
+    .support-banner h3 { font-size: 1rem; color: var(--primary); margin-bottom: 0.4rem; }
+    .support-banner p { font-size: 0.87rem; color: var(--text-light); margin-bottom: 0.9rem; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.45rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .author-card { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-icon"><i class="fab fa-discord"></i></div>
+    <h1>Leave Discord Integration</h1>
+    <p class="subtitle">
+      Notifikasi otomatis ke Discord saat karyawan mengajukan, menyetujui, atau menolak cuti — Odoo 19 &times; Discord Webhook
+    </p>
+    <div class="badge-row">
+      <span class="badge"><i class="fas fa-code-branch"></i> Odoo 19.0</span>
+      <span class="badge"><i class="fas fa-calendar-times"></i> Time Off</span>
+      <span class="badge"><i class="fab fa-discord"></i> Discord Webhook</span>
+      <span class="badge"><i class="fas fa-at"></i> Mention Karyawan</span>
+      <span class="badge"><i class="fas fa-shield-alt"></i> LGPL-3</span>
+    </div>
+    <div style="display:flex;gap:0.7rem;justify-content:center;flex-wrap:wrap;">
+      <a href="https://github.com/dodyakj" target="_blank" class="btn btn-accent">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+      <a href="https://www.odoo.com/apps/modules" target="_blank" class="btn btn-outline">
+        <i class="fas fa-store"></i> Odoo Apps Store
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- FITUR UTAMA -->
+    <div class="section-title">
+      <h2><i class="fas fa-star"></i> Fitur Utama</h2>
+      <p>Semua yang dibutuhkan agar HR dan tim tetap sinkron lewat Discord</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-paper-plane"></i></div>
+        <h4>Notifikasi Otomatis</h4>
+        <p>Kirim pesan Discord otomatis saat leave diajukan, disetujui, ditolak, atau direset ke draft.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-hand-pointer"></i></div>
+        <h4>Tombol Manual Trigger</h4>
+        <p>Tombol <em>"Kirim ke Discord"</em> tersedia di header form leave untuk mengirim ulang kapan saja.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-at"></i></div>
+        <h4>Mention Karyawan</h4>
+        <p>Mention langsung karyawan via Discord User ID — notifikasi sampai ke orangnya, bukan hanya di channel.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-sliders-h"></i></div>
+        <h4>Konfigurasi Simpel</h4>
+        <p>Webhook URL disimpan di <code>System Parameters</code>. Tidak ada halaman konfigurasi rumit.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-file-alt"></i></div>
+        <h4>Pesan Lengkap</h4>
+        <p>Pesan mencakup nama karyawan, jenis cuti, tanggal, durasi, alasan, dan link langsung ke record.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-plug"></i></div>
+        <h4>Integrasi Native ORM</h4>
+        <p>Override <code>hr.leave</code> via ORM Odoo tanpa cron job — ringan dan tidak ada polling.</p>
+      </div>
+    </div>
+
+    <!-- GIF DEMO -->
+    <div class="section-title">
+      <h2><i class="fas fa-play-circle"></i> Demo</h2>
+      <p>Alur lengkap dari pengajuan cuti hingga notifikasi muncul di Discord</p>
+    </div>
+    <div class="demo-box">
+      <img src="leave_discord_demo.gif" alt="Demo Leave Discord Integration"/>
+      <div class="demo-caption">
+        <i class="fas fa-film"></i>
+        Submit leave → webhook terpanggil otomatis → notifikasi lengkap langsung di Discord channel
+      </div>
+    </div>
+
+    <!-- INSTALASI -->
+    <div class="section-title">
+      <h2><i class="fas fa-download"></i> Instalasi</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Copy Modul ke Direktori Addons</h4>
+          <div class="code-block">cp -r ydod_leave_discord/ /odoo/custom-addons/</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Tambahkan Path ke <code>odoo.conf</code></h4>
+          <div class="code-block">[options]<br/>addons_path = /odoo/addons,/odoo/custom-addons</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Restart &amp; Install</h4>
+          <div class="code-block">sudo systemctl restart odoo</div>
+          <p style="margin-top:0.4rem">Lalu buka <strong>Apps → cari "Leave Discord" → Install</strong>.</p>
+          <div class="alert-box alert-info" style="margin-top:0.5rem">
+            <i class="fas fa-info-circle"></i>
+            <span>Jika tidak muncul, aktifkan <strong>Developer Mode</strong> → <strong>Update Apps List</strong>.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KONFIGURASI -->
+    <div class="section-title">
+      <h2><i class="fas fa-cogs"></i> Konfigurasi</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Buat Discord Webhook</h4>
+          <p>Discord Server → channel tujuan → <strong>Edit Channel → Integrations → Webhooks → New Webhook → Copy Webhook URL</strong></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Simpan URL di System Parameters</h4>
+          <p><strong>Settings → Technical → Parameters → System Parameters</strong></p>
+          <div class="code-block">Key&nbsp;: discord.leave.webhook.url<br/>Value : https://discord.com/api/webhooks/&lt;id&gt;/&lt;token&gt;</div>
+          <div class="alert-box alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Jangan hardcode URL di kode. Webhook URL hanya aman di System Parameters (hanya Admin yang bisa akses).</span>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Isi Discord User ID di Profil User</h4>
+          <p><strong>Settings → Users &amp; Companies → Users → pilih user → tab Discord</strong></p>
+          <p style="margin-top:0.4rem;font-size:0.87rem;color:var(--text-light)">
+            Cara dapat User ID: Discord → Settings → Advanced → aktifkan <strong>Developer Mode</strong> → klik kanan nama user → <strong>Copy User ID</strong>
+          </p>
+          <div class="alert-box alert-info" style="margin-top:0.5rem">
+            <i class="fas fa-info-circle"></i>
+            <span>Discord User ID berupa angka, contoh: <code>123456789012345678</code>. Tanpa ID, notifikasi tetap terkirim namun tanpa mention personal.</span>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"><i class="fas fa-check"></i></div>
+        <div class="step-body">
+          <h4>Selesai — Ajukan cuti dan notifikasi langsung muncul di Discord!</h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW NOTIFIKASI -->
+    <div class="section-title">
+      <h2><i class="fab fa-discord"></i> Contoh Notifikasi Discord</h2>
+    </div>
+    <div class="preview-box">
+      <div class="preview-header">
+        <div class="discord-avatar"><i class="fas fa-robot"></i></div>
+        <div>
+          <span class="bot-name">Odoo HR</span>
+          <span class="bot-tag">BOT</span>
+        </div>
+      </div>
+      <div class="preview-msg">
+        📋 <strong>Leave Request Diajukan</strong><br/><br/>
+        👤 Karyawan: <span class="discord-mention">@BudiSantoso</span><br/>
+        📝 Jenis: <strong>Annual Leave</strong><br/>
+        📅 Tanggal: <strong>2026-05-18</strong> s/d <strong>2026-05-22</strong> (5 hari)<br/>
+        💬 Alasan: Liburan keluarga<br/>
+        🕐 Waktu: <strong>07 May 2026 10:30:00 WIB</strong><br/><br/>
+        🔗 http://localhost:9999/odoo/time-off/42
+      </div>
+    </div>
+
+    <!-- PARAMETER -->
+    <div class="section-title">
+      <h2><i class="fas fa-key"></i> Parameter Konfigurasi</h2>
+    </div>
+    <div class="config-section">
+      <table class="config-table">
+        <thead><tr><th>Key</th><th>Keterangan</th><th>Contoh Nilai</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>discord.leave.webhook.url</td>
+            <td>URL Webhook Discord channel penerima notifikasi cuti</td>
+            <td style="font-family:monospace;font-size:0.8rem;color:var(--text-light)">https://discord.com/api/webhooks/xxx/yyy</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- EVENT TRIGGER -->
+    <div class="section-title">
+      <h2><i class="fas fa-bell"></i> Event yang Memicu Notifikasi</h2>
+    </div>
+    <div class="config-section">
+      <table class="config-table">
+        <thead><tr><th>Event</th><th>Aksi di Odoo</th><th>Isi Pesan</th></tr></thead>
+        <tbody>
+          <tr><td>confirm</td><td>Karyawan submit leave request</td><td>📋 Leave Request Diajukan</td></tr>
+          <tr><td>validate</td><td>Manager approve leave</td><td>✅ Leave Request Disetujui</td></tr>
+          <tr><td>refuse</td><td>Manager tolak leave</td><td>❌ Leave Request Ditolak</td></tr>
+          <tr><td>reset</td><td>Reset ke Draft</td><td>🔄 Leave Request Direset ke Draft</td></tr>
+          <tr><td>manual</td><td>Klik tombol "Kirim ke Discord"</td><td>Sesuai state saat ini</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- KEAMANAN -->
+    <div class="section-title">
+      <h2><i class="fas fa-shield-alt"></i> Catatan Penting</h2>
+    </div>
+    <div class="security-list">
+      <div class="security-item">
+        <span class="sec-icon">🔐</span>
+        <p><strong>Webhook URL aman di System Parameter</strong> — hanya Administrator yang bisa melihat atau mengubah nilai.</p>
+      </div>
+      <div class="security-item">
+        <span class="sec-icon">📌</span>
+        <p><strong>Discord User ID bersifat numerik</strong> — ambil dari Discord Developer Mode. Salah ID = mention tidak sampai.</p>
+      </div>
+      <div class="security-item">
+        <span class="sec-icon">🚫</span>
+        <p><strong>User tanpa Discord ID</strong> — pesan tetap terkirim ke channel namun nama ditampilkan sebagai teks biasa (tanpa ping).</p>
+      </div>
+      <div class="security-item">
+        <span class="sec-icon">📋</span>
+        <p><strong>Log tersedia</strong> — semua notifikasi sukses/gagal dicatat di Odoo server log dengan prefix <code>ydod_leave_discord</code>.</p>
+      </div>
+    </div>
+
+    <!-- TROUBLESHOOTING -->
+    <div class="section-title">
+      <h2><i class="fas fa-bug"></i> Troubleshooting</h2>
+    </div>
+    <table class="trouble-table">
+      <thead>
+        <tr>
+          <th><i class="fas fa-exclamation-circle" style="margin-right:0.4rem"></i>Masalah</th>
+          <th><i class="fas fa-wrench" style="margin-right:0.4rem"></i>Solusi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Notifikasi tidak terkirim</td>
+          <td>Cek <strong>System Parameters → <code>discord.leave.webhook.url</code></strong>, pastikan sudah terisi dan valid.</td>
+        </tr>
+        <tr>
+          <td>Tidak ada mention di pesan</td>
+          <td>Isi <strong>Discord User ID</strong> di profil user (<em>Settings → Users → tab Discord</em>). Aktifkan Developer Mode Discord untuk copy User ID.</td>
+        </tr>
+        <tr>
+          <td>Error 404 dari Discord</td>
+          <td>Webhook sudah dihapus di Discord. Buat webhook baru dan update System Parameters.</td>
+        </tr>
+        <tr>
+          <td>Error 429 Rate Limit</td>
+          <td>Terlalu banyak request. Discord batasi 30 req/menit per webhook. Kurangi frekuensi perubahan state.</td>
+        </tr>
+        <tr>
+          <td>Modul tidak muncul di Apps</td>
+          <td>Aktifkan Developer Mode → <strong>Apps → Update Apps List</strong>. Pastikan path di <code>odoo.conf</code> sudah benar.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- TECH STACK -->
+    <div class="section-title"><h2><i class="fas fa-layer-group"></i> Spesifikasi Teknis</h2></div>
+    <div class="tech-card">
+      <div class="tech-row"><span class="tech-label"><i class="fas fa-cube" style="color:var(--accent);margin-right:0.4rem"></i>Odoo</span><span class="tech-value">19.0</span></div>
+      <div class="tech-row"><span class="tech-label"><i class="fab fa-python" style="color:var(--accent);margin-right:0.4rem"></i>Python</span><span class="tech-value">3.11+</span></div>
+      <div class="tech-row"><span class="tech-label"><i class="fas fa-code" style="color:var(--accent);margin-right:0.4rem"></i>Depends</span><span class="tech-value">hr_holidays, hr</span></div>
+      <div class="tech-row"><span class="tech-label"><i class="fas fa-box" style="color:var(--accent);margin-right:0.4rem"></i>Library</span><span class="tech-value">requests (built-in Odoo 19)</span></div>
+      <div class="tech-row"><span class="tech-label"><i class="fas fa-balance-scale" style="color:var(--accent);margin-right:0.4rem"></i>Lisensi</span><span class="tech-value">LGPL-3</span></div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="section-title"><h2><i class="fas fa-tags"></i> Kategori</h2></div>
+    <div class="tag-row">
+      <span class="tag"><i class="fas fa-calendar-times"></i> Time Off</span>
+      <span class="tag"><i class="fab fa-discord"></i> Discord Integration</span>
+      <span class="tag"><i class="fas fa-bell"></i> Notification</span>
+      <span class="tag"><i class="fas fa-users"></i> HR Management</span>
+      <span class="tag"><i class="fas fa-robot"></i> Automation</span>
+      <span class="tag"><i class="fas fa-webhook"></i> Webhook</span>
+    </div>
+
+    <!-- AUTHOR -->
+    <div class="section-title"><h2><i class="fas fa-user-circle"></i> Developer</h2></div>
+    <div class="author-card">
+      <div class="author-avatar"><i class="fas fa-user"></i></div>
+      <div class="author-info">
+        <h4>Dody Ahmad Kusuma Jaya</h4>
+        <p>Odoo ERP Specialist — Technical &amp; Functional &nbsp;|&nbsp; 8+ tahun pengalaman &nbsp;|&nbsp; 20+ proyek</p>
+        <div class="author-links">
+          <a href="https://profile.dodyakj.online" target="_blank" class="author-link"><i class="fas fa-globe"></i> profile.dodyakj.online</a>
+          <a href="https://github.com/dodyakj" target="_blank" class="author-link"><i class="fab fa-github"></i> GitHub</a>
+          <a href="https://www.odoo.com/odoo/apps/modules/browse?search=ydod" target="_blank" class="author-link"><i class="fas fa-store"></i> Odoo Apps</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="support-banner">
+      <h3><i class="fas fa-headset" style="color:var(--accent);margin-right:0.4rem"></i>Butuh Bantuan?</h3>
+      <p>Bug report, customization request, dan pertanyaan teknis. Respon &le;24 jam pada hari kerja.</p>
+      <div style="display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;">
+        <a href="https://profile.dodyakj.online#contact" target="_blank" class="btn btn-accent">
+          <i class="fas fa-envelope"></i> Hubungi Developer
+        </a>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

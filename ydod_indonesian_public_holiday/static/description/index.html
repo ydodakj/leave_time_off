@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Indonesian Public Holiday — Odoo 19</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary:      #CE1126;
+      --primary-dark: #a50e1f;
+      --accent:       #017E84;
+      --accent-dark:  #01656a;
+      --bg-light:     #F8F9FA;
+      --text-main:    #212529;
+      --text-light:   #6C757D;
+      --white:        #FFFFFF;
+      --radius:       12px;
+      --shadow:       0 4px 12px rgba(0,0,0,0.08);
+      --transition:   all 0.3s ease;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; color: var(--text-main); background: var(--bg-light); line-height: 1.6; }
+    a { text-decoration: none; color: inherit; transition: var(--transition); }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #7a0010 50%, #1a1a2e 100%);
+      color: var(--white); padding: 3rem 2rem 2.5rem; text-align: center;
+    }
+    .hero-flag {
+      display: inline-block; width: 72px; height: 48px; border-radius: 8px;
+      overflow: hidden; margin-bottom: 1.2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      vertical-align: middle;
+    }
+    .hero-flag-top { background: #CE1126; height: 50%; }
+    .hero-flag-bottom { background: #FFFFFF; height: 50%; }
+    .hero h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 0.4rem; line-height: 1.25; }
+    .hero .subtitle { font-size: 1rem; opacity: 0.88; margin-bottom: 1.4rem; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; margin-bottom: 1.4rem; }
+    .badge {
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 50px; font-size: 0.82rem; padding: 0.28rem 0.85rem;
+    }
+    .badge i { margin-right: 0.3rem; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.65rem 1.4rem; border-radius: var(--radius);
+      font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: var(--transition); border: none;
+    }
+    .btn-accent { background: var(--accent); color: var(--white); }
+    .btn-accent:hover { background: var(--accent-dark); transform: translateY(-2px); }
+    .btn-outline { background: transparent; border: 2px solid rgba(255,255,255,0.7); color: var(--white); }
+    .btn-outline:hover { background: var(--white); color: var(--primary); }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; }
+    .section-title { margin-bottom: 1.5rem; }
+    .section-title h2 {
+      font-size: 1.35rem; color: var(--primary);
+      display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;
+    }
+    .section-title p { color: var(--text-light); font-size: 0.92rem; }
+
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(255px, 1fr));
+      gap: 1.1rem; margin-bottom: 2.5rem;
+    }
+    .feature-card {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.3rem 1.2rem; border: 1px solid #eee; transition: var(--transition);
+    }
+    .feature-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+    .feature-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-size: 1.1rem; margin-bottom: 0.9rem;
+    }
+    .feature-card h4 { font-size: 0.97rem; font-weight: 600; margin-bottom: 0.35rem; }
+    .feature-card p { font-size: 0.87rem; color: var(--text-light); line-height: 1.55; }
+
+    .steps { margin-bottom: 2.5rem; }
+    .step {
+      display: flex; gap: 1rem; align-items: flex-start;
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.1rem 1.2rem; margin-bottom: 0.85rem; border: 1px solid #eee; transition: var(--transition);
+    }
+    .step:hover { box-shadow: 0 8px 18px rgba(0,0,0,0.1); }
+    .step-num {
+      min-width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-weight: 700; font-size: 0.9rem;
+    }
+    .step-body h4 { font-size: 0.97rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .step-body p  { font-size: 0.87rem; color: var(--text-light); }
+
+    .demo-box {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      overflow: hidden; border: 1px solid #eee; margin-bottom: 2.5rem;
+    }
+    .demo-box img { width: 100%; display: block; }
+    .demo-box .demo-caption {
+      padding: 0.75rem 1rem; font-size: 0.87rem; color: var(--text-light);
+      border-top: 1px solid #eee; display: flex; align-items: center; gap: 0.4rem;
+    }
+    .demo-box .demo-caption i { color: var(--accent); }
+
+    .config-table {
+      width: 100%; border-collapse: collapse; background: var(--white);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 2.5rem;
+    }
+    .config-table thead tr { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+    .config-table thead th { color: var(--white); padding: 0.8rem 1rem; font-size: 0.88rem; text-align: left; font-weight: 600; }
+    .config-table tbody tr { border-bottom: 1px solid #f0f0f0; }
+    .config-table tbody tr:last-child { border-bottom: none; }
+    .config-table tbody tr:hover { background: var(--bg-light); }
+    .config-table td { padding: 0.75rem 1rem; font-size: 0.875rem; vertical-align: top; }
+    .config-table td:first-child { color: var(--accent); font-weight: 600; font-size: 0.85rem; }
+
+    .alert-box {
+      border-radius: 8px; padding: 0.75rem 1rem; margin: 0.55rem 0 0.3rem;
+      display: flex; align-items: flex-start; gap: 0.6rem; font-size: 0.85rem; line-height: 1.55;
+    }
+    .alert-info    { background: #e8f4f8; border-left: 4px solid var(--accent); color: #1a5c61; }
+    .alert-warning { background: #fff8e1; border-left: 4px solid #f59e0b; color: #92400e; }
+    .alert-box > i { margin-top: 0.15rem; flex-shrink: 0; }
+
+    .api-card {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.3rem 1.5rem; margin-bottom: 2.5rem; border: 1px solid #eee;
+    }
+    .api-row {
+      display: flex; align-items: flex-start; gap: 0.8rem; padding: 0.7rem 0;
+      border-bottom: 1px solid #f5f5f5;
+    }
+    .api-row:last-child { border-bottom: none; }
+    .api-priority {
+      min-width: 26px; height: 26px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-weight: 700; font-size: 0.75rem; flex-shrink: 0;
+    }
+    .api-info { flex: 1; }
+    .api-info strong { font-size: 0.9rem; display: block; margin-bottom: 0.2rem; }
+    .api-info code { font-size: 0.78rem; color: var(--accent); background: #f0fdfe; padding: 2px 6px; border-radius: 4px; }
+    .api-info small { color: var(--text-light); font-size: 0.82rem; }
+
+    .holiday-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.6rem; margin-bottom: 2.5rem;
+    }
+    .holiday-chip {
+      background: var(--white); border-radius: 8px; box-shadow: var(--shadow);
+      padding: 0.55rem 0.8rem; border-left: 3px solid var(--primary);
+      font-size: 0.82rem;
+    }
+    .holiday-chip .date { color: var(--accent); font-weight: 600; font-size: 0.78rem; margin-bottom: 0.15rem; }
+    .holiday-chip .name { color: var(--text-main); font-weight: 500; }
+
+    .trouble-table {
+      width: 100%; border-collapse: collapse; background: var(--white);
+      border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 2.5rem;
+    }
+    .trouble-table thead tr { background: linear-gradient(135deg, #2d3748, #1a202c); }
+    .trouble-table thead th { color: var(--white); padding: 0.75rem 1rem; font-size: 0.88rem; text-align: left; font-weight: 600; }
+    .trouble-table tbody tr { border-bottom: 1px solid #f0f0f0; }
+    .trouble-table tbody tr:last-child { border-bottom: none; }
+    .trouble-table tbody tr:hover { background: var(--bg-light); }
+    .trouble-table td { padding: 0.75rem 1rem; font-size: 0.875rem; vertical-align: top; }
+    .trouble-table td:first-child { color: #dc2626; font-weight: 500; }
+
+    .tech-card {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.3rem 1.5rem; margin-bottom: 2.5rem; border: 1px solid #eee;
+    }
+    .tech-row { display: flex; align-items: center; gap: 0.6rem; padding: 0.45rem 0; border-bottom: 1px solid #f5f5f5; }
+    .tech-row:last-child { border-bottom: none; }
+    .tech-label { color: var(--text-light); font-size: 0.85rem; min-width: 100px; }
+    .tech-value { font-size: 0.9rem; font-weight: 500; }
+
+    .tag-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 2.5rem; }
+    .tag {
+      background: var(--bg-light); border: 1px solid #ddd; border-radius: 50px;
+      font-size: 0.82rem; color: var(--text-main); padding: 0.28rem 0.75rem;
+    }
+    .tag i { color: var(--accent); margin-right: 0.25rem; }
+
+    .author-card {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      border-radius: var(--radius); padding: 1.5rem 1.8rem; color: var(--white);
+      display: flex; align-items: center; gap: 1.2rem; margin-bottom: 2.5rem; flex-wrap: wrap;
+    }
+    .author-avatar {
+      width: 58px; height: 58px; border-radius: 50%; background: rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center; font-size: 1.6rem; flex-shrink: 0;
+      border: 3px solid rgba(255,255,255,0.5);
+    }
+    .author-info h4 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .author-info p  { font-size: 0.87rem; opacity: 0.88; margin-bottom: 0.5rem; }
+    .author-links { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .author-link {
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.35);
+      border-radius: 50px; font-size: 0.8rem; padding: 0.25rem 0.75rem; color: var(--white);
+      display: flex; align-items: center; gap: 0.3rem; transition: var(--transition);
+    }
+    .author-link:hover { background: rgba(255,255,255,0.35); }
+
+    .support-banner {
+      background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 1.3rem 1.5rem; text-align: center; border: 1px solid #eee; margin-bottom: 1rem;
+    }
+    .support-banner h3 { font-size: 1rem; color: var(--primary); margin-bottom: 0.4rem; }
+    .support-banner p { font-size: 0.87rem; color: var(--text-light); margin-bottom: 0.9rem; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.45rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .holiday-grid { grid-template-columns: 1fr 1fr; }
+      .author-card { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-flag"><div class="hero-flag-top"></div><div class="hero-flag-bottom"></div></div>
+    <h1>Indonesian Public Holiday</h1>
+    <p class="subtitle">
+      Import hari libur nasional Indonesia ke Odoo Time Off secara otomatis dari API — Odoo 19
+    </p>
+    <div class="badge-row">
+      <span class="badge"><i class="fas fa-code-branch"></i> Odoo 19.0</span>
+      <span class="badge"><i class="fas fa-calendar-alt"></i> Public Holidays</span>
+      <span class="badge"><i class="fas fa-cloud-download-alt"></i> API Integration</span>
+      <span class="badge"><i class="fas fa-wifi"></i> Offline Fallback</span>
+      <span class="badge"><i class="fas fa-shield-alt"></i> LGPL-3</span>
+    </div>
+    <div style="display:flex;gap:0.7rem;justify-content:center;flex-wrap:wrap;">
+      <a href="https://github.com/dodyakj" target="_blank" class="btn btn-accent">
+        <i class="fab fa-github"></i> GitHub
+      </a>
+      <a href="https://www.odoo.com/apps/modules" target="_blank" class="btn btn-outline">
+        <i class="fas fa-store"></i> Odoo Apps Store
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- FITUR UTAMA -->
+    <div class="section-title">
+      <h2><i class="fas fa-star"></i> Fitur Utama</h2>
+      <p>Import hari libur Indonesia dengan mudah langsung ke sistem Time Off Odoo</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-cloud-download-alt"></i></div>
+        <h4>Ambil dari API Otomatis</h4>
+        <p>Fetch data hari libur dari <code>api-hari-libur.vercel.app</code> per tahun secara real-time.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-wifi"></i></div>
+        <h4>Offline Fallback</h4>
+        <p>Jika API tidak tersedia, data built-in untuk tahun 2025 &amp; 2026 digunakan sebagai cadangan.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-globe-asia"></i></div>
+        <h4>Masuk ke Public Holidays</h4>
+        <p>Mode Global langsung memasukkan data ke <strong>Time Off → Configuration → Public Holidays</strong>.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-eye"></i></div>
+        <h4>Preview Sebelum Import</h4>
+        <p>Lihat daftar lengkap hari libur yang akan diimport sebelum benar-benar menyimpan ke Odoo.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-copy"></i></div>
+        <h4>Skip Duplikat Otomatis</h4>
+        <p>Cek otomatis hari libur yang sudah ada — tidak ada entri ganda meskipun dijalankan berkali-kali.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-calendar-week"></i></div>
+        <h4>Per-Calendar Mode</h4>
+        <p>Terapkan hari libur ke jadwal kerja tertentu, atau global untuk semua karyawan sekaligus.</p>
+      </div>
+    </div>
+
+    <!-- GIF DEMO -->
+    <div class="section-title">
+      <h2><i class="fas fa-play-circle"></i> Demo</h2>
+      <p>Alur lengkap dari buka wizard hingga hari libur muncul di Public Holidays</p>
+    </div>
+    <div class="demo-box">
+      <img src="indonesian_holiday_demo.gif" alt="Demo Indonesian Public Holiday"/>
+      <div class="demo-caption">
+        <i class="fas fa-film"></i>
+        Buka wizard → pilih tahun → preview → import → hari libur langsung muncul di Time Off &gt; Public Holidays
+      </div>
+    </div>
+
+    <!-- DATA SOURCE -->
+    <div class="section-title">
+      <h2><i class="fas fa-database"></i> Sumber Data</h2>
+      <p>Urutan prioritas pengambilan data hari libur</p>
+    </div>
+    <div class="api-card">
+      <div class="api-row">
+        <div class="api-priority">1</div>
+        <div class="api-info">
+          <strong>API Hari Libur Indonesia (Primary)</strong>
+          <code>https://api-hari-libur.vercel.app/api?year=YYYY</code><br/>
+          <small>Sumber utama — data resmi hari libur nasional dan cuti bersama RI</small>
+        </div>
+      </div>
+      <div class="api-row">
+        <div class="api-priority">2</div>
+        <div class="api-info">
+          <strong>Day Off API (Fallback)</strong>
+          <code>https://dayoffapi.vercel.app/api?year=YYYY</code><br/>
+          <small>Digunakan jika primary API tidak merespons</small>
+        </div>
+      </div>
+      <div class="api-row">
+        <div class="api-priority">3</div>
+        <div class="api-info">
+          <strong>Data Built-in Offline</strong>
+          <code>2025: 26 hari &nbsp;|&nbsp; 2026: 14 hari (estimasi)</code><br/>
+          <small>Digunakan jika kedua API tidak tersedia — sudah include cuti bersama</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATA PREVIEW -->
+    <div class="section-title">
+      <h2><i class="fas fa-calendar-alt"></i> Contoh Data Hari Libur 2025</h2>
+      <p>26 hari libur nasional dan cuti bersama (termasuk Idul Fitri)</p>
+    </div>
+    <div class="holiday-grid">
+      <div class="holiday-chip"><div class="date">1 Jan</div><div class="name">Tahun Baru Masehi</div></div>
+      <div class="holiday-chip"><div class="date">29 Jan</div><div class="name">Tahun Baru Imlek</div></div>
+      <div class="holiday-chip"><div class="date">28 Mar</div><div class="name">Hari Suci Nyepi</div></div>
+      <div class="holiday-chip"><div class="date">29 Mar</div><div class="name">Wafat Isa Al-Masih</div></div>
+      <div class="holiday-chip"><div class="date">31 Mar–4 Apr</div><div class="name">Idul Fitri + Cuti Bersama</div></div>
+      <div class="holiday-chip"><div class="date">1 Mei</div><div class="name">Hari Buruh Int'l</div></div>
+      <div class="holiday-chip"><div class="date">12 Mei</div><div class="name">Hari Raya Waisak</div></div>
+      <div class="holiday-chip"><div class="date">29 Mei</div><div class="name">Kenaikan Isa Al-Masih</div></div>
+      <div class="holiday-chip"><div class="date">1 Jun</div><div class="name">Hari Lahir Pancasila</div></div>
+      <div class="holiday-chip"><div class="date">6 Jun</div><div class="name">Idul Adha</div></div>
+      <div class="holiday-chip"><div class="date">17 Agt</div><div class="name">HUT Kemerdekaan RI</div></div>
+      <div class="holiday-chip"><div class="date">5 Sep</div><div class="name">Maulid Nabi SAW</div></div>
+      <div class="holiday-chip"><div class="date">25–26 Des</div><div class="name">Natal + Cuti Bersama</div></div>
+    </div>
+
+    <!-- INSTALASI -->
+    <div class="section-title"><h2><i class="fas fa-download"></i> Instalasi</h2></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Copy Modul ke Direktori Addons</h4>
+          <p style="font-family:monospace;font-size:0.84rem;background:#1e1e2e;color:#cdd6f4;padding:0.6rem 0.8rem;border-radius:6px;margin-top:0.4rem">
+            cp -r ydod_indonesian_public_holiday/ /odoo/custom-addons/
+          </p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Restart &amp; Install</h4>
+          <p>Restart Odoo, buka <strong>Apps → cari "Indonesian Public Holiday" → Install</strong>.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARA PAKAI -->
+    <div class="section-title">
+      <h2><i class="fas fa-rocket"></i> Cara Menggunakan</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Buka Wizard Import</h4>
+          <p><strong>Time Off → Configuration → Indonesian Public Holidays → Import Hari Libur Indonesia</strong></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Atur Parameter Import</h4>
+          <p>Pilih <strong>Tahun</strong> yang ingin diimport dan <strong>Import Mode</strong>:</p>
+          <table class="config-table" style="margin-top:0.6rem">
+            <thead><tr><th>Mode</th><th>Keterangan</th></tr></thead>
+            <tbody>
+              <tr><td>Global Public Holidays</td><td>Masuk ke Time Off → Public Holidays, berlaku semua karyawan</td></tr>
+              <tr><td>Per Work Schedule</td><td>Terapkan ke jadwal kerja tertentu saja</td></tr>
+              <tr><td>Keduanya</td><td>Buat entri global sekaligus per-calendar</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Preview (Opsional)</h4>
+          <p>Klik <strong>Preview</strong> untuk melihat daftar hari libur sebelum import.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <h4>Import</h4>
+          <p>Klik <strong>Import Sekarang</strong>. Notifikasi sukses menampilkan jumlah entri yang dibuat dan dilewati.</p>
+          <div class="alert-box alert-info" style="margin-top:0.5rem">
+            <i class="fas fa-info-circle"></i>
+            <span>Aktifkan <strong>Skip Duplikat</strong> (default: Ya) agar import dapat dijalankan berkali-kali tanpa membuat entri ganda.</span>
+          </div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num"><i class="fas fa-check"></i></div>
+        <div class="step-body">
+          <h4>Verifikasi di Public Holidays</h4>
+          <p>Buka <strong>Time Off → Configuration → Public Holidays</strong> untuk memastikan data sudah masuk.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TROUBLESHOOTING -->
+    <div class="section-title"><h2><i class="fas fa-bug"></i> Troubleshooting</h2></div>
+    <table class="trouble-table">
+      <thead>
+        <tr>
+          <th><i class="fas fa-exclamation-circle" style="margin-right:0.4rem"></i>Masalah</th>
+          <th><i class="fas fa-wrench" style="margin-right:0.4rem"></i>Solusi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Data tidak muncul di Public Holidays</td>
+          <td>Pastikan <strong>Import Mode</strong> diset ke <em>Global Public Holidays</em>. Mode per-calendar tidak muncul di menu Public Holidays global.</td>
+        </tr>
+        <tr>
+          <td>API error / tidak ada data</td>
+          <td>Modul otomatis fallback ke API kedua, lalu ke data offline. Cek koneksi internet server Odoo jika selalu menggunakan data offline.</td>
+        </tr>
+        <tr>
+          <td>Data duplikat setelah import ulang</td>
+          <td>Aktifkan opsi <strong>Skip Duplikat</strong> di wizard (default sudah aktif). Jika sudah terlanjur duplikat, hapus manual dari menu Public Holidays.</td>
+        </tr>
+        <tr>
+          <td>Tahun yang diinginkan belum tersedia di API</td>
+          <td>Data built-in tersedia untuk 2025 dan 2026. Untuk tahun lain, tunggu update API atau tambahkan data offline secara manual di kode.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- TECH STACK -->
+    <div class="section-title"><h2><i class="fas fa-layer-group"></i> Spesifikasi Teknis</h2></div>
+    <div class="tech-card">
+      <div class="tech-row"><span class="tech-label"><i class="fas fa-cube" style="color:var(--accent);margin-right:0.4rem"></i>Odoo</span><span class="tech-value">19.0</span></div>
+      <div class="tech-row"><span class="tech-label"><i class="fab fa-python" style="color:var(--accent);margin-right:0.4rem"></i>Python</span><span class="tech-value">3.11+</span></div>
+      <div class="tech-row"><span class="tech-label"><i class="fas fa-code" style="color:var(--accent);margin-right:0.4rem"></i>Depends</span><span class="tech-value">hr_holidays, resource</span></div>
+      <div class="tech-row"><span class="tech-label"><i class="fas fa-box" style="color:var(--accent);margin-right:0.4rem"></i>Library</span><span class="tech-value">requests (built-in Odoo 19)</span></div>
+      <div class="tech-row"><span class="tech-label"><i class="fas fa-server" style="color:var(--accent);margin-right:0.4rem"></i>API</span><span class="tech-value">api-hari-libur.vercel.app (primary) · dayoffapi.vercel.app (fallback)</span></div>
+      <div class="tech-row"><span class="tech-label"><i class="fas fa-balance-scale" style="color:var(--accent);margin-right:0.4rem"></i>Lisensi</span><span class="tech-value">LGPL-3</span></div>
+    </div>
+
+    <!-- TAGS -->
+    <div class="section-title"><h2><i class="fas fa-tags"></i> Kategori</h2></div>
+    <div class="tag-row">
+      <span class="tag"><i class="fas fa-calendar-alt"></i> Public Holiday</span>
+      <span class="tag"><i class="fas fa-flag"></i> Indonesia</span>
+      <span class="tag"><i class="fas fa-calendar-times"></i> Time Off</span>
+      <span class="tag"><i class="fas fa-cloud-download-alt"></i> API Integration</span>
+      <span class="tag"><i class="fas fa-users"></i> HR Management</span>
+      <span class="tag"><i class="fas fa-mosque"></i> Hari Libur Nasional</span>
+    </div>
+
+    <!-- AUTHOR -->
+    <div class="section-title"><h2><i class="fas fa-user-circle"></i> Developer</h2></div>
+    <div class="author-card">
+      <div class="author-avatar"><i class="fas fa-user"></i></div>
+      <div class="author-info">
+        <h4>Dody Ahmad Kusuma Jaya</h4>
+        <p>Odoo ERP Specialist — Technical &amp; Functional &nbsp;|&nbsp; 8+ tahun pengalaman &nbsp;|&nbsp; 20+ proyek</p>
+        <div class="author-links">
+          <a href="https://profile.dodyakj.online" target="_blank" class="author-link"><i class="fas fa-globe"></i> profile.dodyakj.online</a>
+          <a href="https://github.com/dodyakj" target="_blank" class="author-link"><i class="fab fa-github"></i> GitHub</a>
+          <a href="https://www.odoo.com/odoo/apps/modules/browse?search=ydod" target="_blank" class="author-link"><i class="fas fa-store"></i> Odoo Apps</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="support-banner">
+      <h3><i class="fas fa-headset" style="color:var(--accent);margin-right:0.4rem"></i>Butuh Bantuan?</h3>
+      <p>Bug report, request tahun baru, dan customization. Respon &le;24 jam pada hari kerja.</p>
+      <div style="display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;">
+        <a href="https://profile.dodyakj.online#contact" target="_blank" class="btn btn-accent">
+          <i class="fas fa-envelope"></i> Hubungi Developer
+        </a>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

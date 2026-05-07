@@ -29,8 +29,8 @@
         'views/menu_views.xml',
     ],
     'images': [
-        'static/description/icon.png',
         'static/description/indonesian_holiday_demo.gif',
+        'static/description/icon.png',
     ],
     'installable': True,
     'application': False,

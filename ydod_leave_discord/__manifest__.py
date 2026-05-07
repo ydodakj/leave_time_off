@@ -23,8 +23,8 @@
         'views/menu_views.xml',
     ],
     'images': [
-        'static/description/icon.png',
         'static/description/leave_discord_demo.gif',
+        'static/description/icon.png',
     ],
     'installable': True,
     'application': False,
