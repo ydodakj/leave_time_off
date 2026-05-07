@@ -22,7 +22,10 @@
         'views/hr_leave_views.xml',
         'views/menu_views.xml',
     ],
-    'images': ['static/description/banner.png'],
+    'images': [
+        'static/description/icon.png',
+        'static/description/leave_discord_demo.gif',
+    ],
     'installable': True,
     'application': False,
     'auto_install': False,

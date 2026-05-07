@@ -28,7 +28,10 @@
         'wizard/import_holiday_wizard_views.xml',
         'views/menu_views.xml',
     ],
-    'images': ['static/description/banner.png'],
+    'images': [
+        'static/description/icon.png',
+        'static/description/indonesian_holiday_demo.gif',
+    ],
     'installable': True,
     'application': False,
     'auto_install': False,
