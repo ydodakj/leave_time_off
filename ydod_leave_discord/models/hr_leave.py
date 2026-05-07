@@ -45,7 +45,7 @@ class HrLeave(models.Model):
         lines = [
             f'{icon} **{label}**\n',
             f'👤 Karyawan: {mention}',
-            f'📝 Jenis Cuti: **{leave_type}**',
+            f'📝 Jenis: **{leave_type}**',
             f'📅 Tanggal: **{date_from}** s/d **{date_to}** ({duration} hari)',
         ]
         if self.name:
@@ -116,4 +116,10 @@ class HrLeave(models.Model):
     def action_draft(self):
         result = super().action_draft()
         self._send_discord('reset')
+        return result
+
+
+    def action_validate(self):
+        result = super().action_validate()
+        self._send_discord('validate')
         return result
