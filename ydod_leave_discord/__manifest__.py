@@ -12,7 +12,7 @@
         - Employee mention via Discord User ID on res.users
     """,
     'author': 'Dody Ahmad Kusuma Jaya',
-    'website': 'https://github.com/dodyakj',
+    'website': 'https://cv.dodyakj.online/',
     'license': 'LGPL-3',
     'depends': ['hr_holidays', 'hr'],
     'data': [
